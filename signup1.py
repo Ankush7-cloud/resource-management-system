@@ -3,7 +3,7 @@ from db import init_db
 import random
 
 def generate_unique_employee_id(conn, role):
-    # Fetch already used IDs
+    
     existing_ids = conn.execute("SELECT employee_id FROM users").fetchall()
     used_ids = {row[0] for row in existing_ids if row[0] is not None}
 
@@ -34,19 +34,19 @@ def signup():
                 st.error("❌ Passwords do not match.")
                 return
 
-            # Check if username already exists
+            
             user_exists = conn.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()
             if user_exists:
                 st.error("❌ Username already exists.")
                 return
 
-            # Generate and assign unique employee ID
+            
             emp_id = generate_unique_employee_id(conn, role)
             if not emp_id:
                 st.error("❌ No more Employee IDs available for this role.")
                 return
 
-            # Insert new user
+            
             conn.execute(
                 "INSERT INTO users (username, email, password, role, employee_id) VALUES (?, ?, ?, ?, ?)",
                 (username, email, password, role, emp_id)
