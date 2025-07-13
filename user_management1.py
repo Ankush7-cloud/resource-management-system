@@ -3,12 +3,12 @@ from db import init_db
 import random
 
 def get_all_used_ids(conn):
-    """Fetch all employee IDs used so far."""
+    
     ids = conn.execute("SELECT employee_id FROM users").fetchall()
     return {i[0] for i in ids if i[0]}
 
 def generate_unique_employee_id(conn, role):
-    """Generate a unique (non-repeating) employee ID."""
+    
     used_ids = get_all_used_ids(conn)
     if role == 'admin':
         possible_ids = {f"A{str(i).zfill(3)}" for i in range(1, 21)}
@@ -30,11 +30,11 @@ def user_management():
     current_user = st.session_state['username']
     current_role = st.session_state['role']
 
-    # Check if employee ID already exists
+    
     result = conn.execute("SELECT employee_id FROM users WHERE username = ?", (current_user,)).fetchone()
     current_emp_id = result[0] if result else None
 
-    # If not, assign a unique one and save it permanently
+    
     if not current_emp_id:
         new_id = generate_unique_employee_id(conn, current_role)
         if new_id:
@@ -46,7 +46,7 @@ def user_management():
     st.subheader("📋 Registered Users")
 
     if current_role == 'admin':
-        # Show all users
+        
         rows = conn.execute("SELECT username, email, employee_id, role FROM users").fetchall()
         data = [
             {
@@ -58,7 +58,7 @@ def user_management():
         ]
         st.dataframe(data, use_container_width=True)
     else:
-        # Show only logged-in user's data
+        
         row = conn.execute("SELECT username, email, employee_id, role FROM users WHERE username = ?", (current_user,)).fetchone()
         if row:
             data = [{
