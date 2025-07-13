@@ -3,7 +3,7 @@ import duckdb
 def init_db():
     conn = duckdb.connect("app_data.db")
 
-    # Create users table (initial definition)
+    
     conn.execute("""
         CREATE TABLE IF NOT EXISTS users (
             username TEXT PRIMARY KEY,
@@ -13,7 +13,7 @@ def init_db():
         )
     """)
 
-    # Check and add 'employee_id' to users table if not present
+    
     try:
         user_columns = conn.execute("PRAGMA table_info(users);").fetchall()
         user_column_names = [col[1] for col in user_columns]
@@ -23,7 +23,7 @@ def init_db():
     except Exception as e:
         print(f"❌ Failed to add 'employee_id' column: {e}")
 
-    # Create devices table without is_shared first
+    
     conn.execute("""
         CREATE TABLE IF NOT EXISTS devices (
             service_tag TEXT PRIMARY KEY,
@@ -33,7 +33,7 @@ def init_db():
         )
     """)
 
-    # Check and add 'is_shared' to devices table if not present
+    
     try:
         device_columns = conn.execute("PRAGMA table_info(devices);").fetchall()
         device_column_names = [col[1] for col in device_columns]
