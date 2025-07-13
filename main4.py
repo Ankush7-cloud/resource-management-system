@@ -9,10 +9,10 @@ from insert_device import insert_device
 from delete_device import delete_device
 from update_device2 import update_device
 
-# Set page configuration
+
 st.set_page_config(page_title="Device Management App", layout="wide")
 
-# ✅ Initialize session keys safely
+
 if "username" not in st.session_state:
     st.session_state["username"] = None
 if "role" not in st.session_state:
@@ -20,11 +20,11 @@ if "role" not in st.session_state:
 if "page" not in st.session_state:
     st.session_state["page"] = "Home"
 
-# ✅ If user is logged in
+
 if st.session_state["username"]:
     st.sidebar.markdown(f"👤 Logged in as: {st.session_state.username}")
 
-    # ✅ Handle logout
+    
     if st.sidebar.button("Logout"):
         st.session_state.clear()
         st.session_state["page"] = "Home"
@@ -49,12 +49,12 @@ if st.session_state["username"]:
         ])
         st.session_state["page"] = menu
 
-# ✅ If not logged in
+
 else:
     menu = st.sidebar.selectbox("Menu", ["Home", "Signup", "Login"])
     st.session_state["page"] = menu
 
-# ✅ Page routing
+
 page = st.session_state["page"]
 
 if page == "Home":
