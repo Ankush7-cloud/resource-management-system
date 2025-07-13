@@ -6,7 +6,7 @@ def update_device():
 
     conn = init_db()
 
-    # Fetch all service tags
+    
     service_tags = conn.execute("SELECT service_tag FROM devices").fetchall()
     service_tags = [tag[0] for tag in service_tags]
 
@@ -16,7 +16,7 @@ def update_device():
 
     selected_tag = st.selectbox("Select Service Tag to Update", service_tags)
 
-    # Fetch existing data for selected tag
+    
     device = conn.execute("SELECT employee_id, device_type, memory, is_shared FROM devices WHERE service_tag = ?", (selected_tag,)).fetchone()
 
     if device:
