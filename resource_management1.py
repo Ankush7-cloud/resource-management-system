@@ -11,7 +11,7 @@ def resource_management():
 
     conn = init_db()
 
-    # Step 1: Fetch 5 shared desktops (with owners)
+    
     devices = conn.execute("SELECT service_tag, employee_id FROM devices WHERE is_shared = 'Yes' LIMIT 5").fetchall()
     if len(devices) < 5:
         st.warning("⚠ Need at least 5 shared devices marked with 'is_shared = Yes'")
@@ -19,7 +19,7 @@ def resource_management():
 
     owners = [owner for _, owner in devices]
 
-    # Step 2: Get 5 other users not in owners
+    
     all_users = conn.execute("SELECT DISTINCT employee_id FROM devices").fetchall()
     all_users = [u[0] for u in all_users]
     sharers = [u for u in all_users if u not in owners][:5]
@@ -28,12 +28,12 @@ def resource_management():
         st.warning("⚠ Not enough eligible sharing users found.")
         return
 
-    # Step 3: Assign sharers to desktops
+    
     year, month = 2025, 7
     days_in_july = pd.date_range(f"{year}-07-01", f"{year}-07-31")
     np.random.seed(42)
 
-    share_plan = {}  # Map: Service Tag -> {owner, sharer, dates}
+    share_plan = {}  
     for i in range(5):
         service_tag, owner = devices[i]
         sharer = sharers[i]
@@ -44,7 +44,7 @@ def resource_management():
             "days": days
         }
 
-    # Step 4: Draw calendar
+    
     fig, ax = plt.subplots(figsize=(14, 7))
     cal = calendar.Calendar()
     weeks = cal.monthdayscalendar(year, month)
@@ -71,7 +71,7 @@ def resource_management():
     ax.axis('off')
     plt.title("📅 July 2025 - Desktop Sharing Calendar", fontsize=14, weight='bold')
 
-    # Step 5: Legend (based on Service Tag)
+    
     legend_items = [
         mpatches.Patch(color=tag_colors[tag],
                        label=f"Service Tag: {tag} (Owner: {share_plan[tag]['owner']}, Shared with: {share_plan[tag]['sharer']})")
@@ -80,7 +80,7 @@ def resource_management():
     ax.legend(handles=legend_items, loc='lower center', bbox_to_anchor=(0.5, -0.2), ncol=1, fontsize=9)
     st.pyplot(fig)
 
-    # Step 6: Sharing summary
+    
     st.subheader("📋 Sharing Summary")
     for tag, info in share_plan.items():
         st.markdown(f"🔁 *Service Tag {tag}* (owned by {info['owner']}) is shared with *{info['sharer']}* for 18 days.")
