@@ -1,0 +1,1 @@
+As part of the Data Science Internship at IDEAS-TIH, we have developed a resource management software using Python in Streamlit.Employees of an organisation can signup and login and then thay are assigned the resources i.e. the computers in an efficient manner.
